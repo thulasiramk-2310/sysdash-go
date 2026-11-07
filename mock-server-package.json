@@ -1,0 +1,12 @@
+{
+  "name": "sysdash-mock-server",
+  "version": "1.0.0",
+  "description": "Mock WebSocket server for SysDash testing",
+  "main": "mock-server.js",
+  "scripts": {
+    "start": "node mock-server.js"
+  },
+  "dependencies": {
+    "ws": "^8.14.2"
+  }
+}
