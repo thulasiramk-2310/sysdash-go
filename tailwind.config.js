@@ -8,23 +8,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "#0f1724",        // page background
-        surface: "#0b1220",   // card bg
-        accent1: "#7C5CFF",   // purple (primary)
-        accent2: "#00D4FF",   // cyan
-        accent3: "#FFB86B",   // warm orange
-        success: "#10B981",
-        danger: "#EF4444",
-        text: "#E6EEF8",
-        sub: "#94A3B8"
+        bg: "rgb(var(--c-bg) / <alpha-value>)",
+        surface: "rgb(var(--c-surface) / <alpha-value>)",
+        raised: "rgb(var(--c-raised) / <alpha-value>)",
+        line: "rgb(var(--c-line) / <alpha-value>)",
+        accent1: "rgb(var(--c-accent1) / <alpha-value>)",
+        accent2: "rgb(var(--c-accent2) / <alpha-value>)",
+        accent3: "rgb(var(--c-accent3) / <alpha-value>)",
+        success: "rgb(var(--c-success) / <alpha-value>)",
+        danger: "rgb(var(--c-danger) / <alpha-value>)",
+        text: "rgb(var(--c-text) / <alpha-value>)",
+        sub: "rgb(var(--c-sub) / <alpha-value>)"
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['Monaco', 'Courier New', 'monospace'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       boxShadow: {
-        'glow': '0 0 20px rgba(124, 92, 255, 0.3)',
-        'glow-cyan': '0 0 20px rgba(0, 212, 255, 0.3)',
+        'glow': '0 0 24px rgb(var(--c-accent1) / 0.18)',
+        'glow-cyan': '0 0 24px rgb(var(--c-accent2) / 0.18)',
+        'card': '0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 32px -12px rgba(0,0,0,0.6)',
       }
     },
   },

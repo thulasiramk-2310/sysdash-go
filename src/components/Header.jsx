@@ -48,7 +48,7 @@ const Header = () => {
   };
   
   return (
-    <header className="bg-surface border-b border-sub/20 px-8 py-4 shadow-lg">
+    <header className="bg-bg/70 backdrop-blur-xl border-b border-line/[0.06] px-8 py-3.5 sticky top-0 z-20">
       <div className="flex items-center justify-between">
         {/* Left: Logo & Title */}
         <div className="flex items-center gap-4">
@@ -57,13 +57,13 @@ const Header = () => {
               <Activity className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-text">SysDash</h1>
-              <p className="text-xs text-sub">System Monitor</p>
+              <h1 className="text-xl font-semibold text-text">SysDash</h1>
+              <p className="text-[11px] text-sub uppercase tracking-[0.16em]">System Monitor</p>
             </div>
           </div>
           
           {/* Connection status */}
-          <div className="flex items-center gap-2 px-3 py-2 bg-bg rounded-lg border border-sub/20">
+          <div className="flex items-center gap-2 px-3 py-2 bg-line/[0.03] rounded-full border border-line/[0.07]">
             <div className={`w-2 h-2 rounded-full ${getConnectionColor()}`} />
             <span className="text-sm text-sub">{getConnectionText()}</span>
           </div>
@@ -76,8 +76,8 @@ const Header = () => {
             onClick={togglePause}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
               isPaused
-                ? 'bg-accent1 border-accent1 text-white hover:bg-accent1/90'
-                : 'bg-surface border-sub/30 text-text hover:bg-bg'
+                ? 'bg-accent1 border-accent1 text-bg font-semibold hover:bg-accent1/90'
+                : 'bg-line/[0.03] border-line/[0.10] text-text hover:bg-line/[0.07]'
             }`}
             aria-label={isPaused ? 'Resume updates' : 'Pause updates'}
           >
@@ -88,7 +88,7 @@ const Header = () => {
           </button>
           
           {/* Timeframe selector */}
-          <div className="flex items-center gap-2 px-3 py-2 bg-bg rounded-lg border border-sub/20">
+          <div className="flex items-center gap-2 px-3 py-2 bg-line/[0.03] rounded-full border border-line/[0.07]">
             <Clock className="w-4 h-4 text-sub" />
             <select
               value={timeframe}
@@ -104,15 +104,15 @@ const Header = () => {
           </div>
           
           {/* Host display */}
-          <div className="flex items-center gap-2 px-3 py-2 bg-bg rounded-lg border border-sub/20">
+          <div className="flex items-center gap-2 px-3 py-2 bg-line/[0.03] rounded-full border border-line/[0.07]">
             <span className="text-sm text-sub">Host:</span>
-            <span className="text-sm font-semibold text-accent1">{selectedHost}</span>
+            <span className="text-sm font-medium text-accent1 font-mono">{selectedHost}</span>
           </div>
         </div>
         
         {/* Right: User menu */}
         <div className="flex items-center gap-3">
-          <button className="w-10 h-10 bg-gradient-to-br from-accent2 to-accent1 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+          <button className="w-10 h-10 bg-gradient-to-br from-accent2 to-accent1 rounded-full flex items-center justify-center text-bg hover:opacity-90 transition-opacity">
             <User className="w-5 h-5" />
           </button>
         </div>

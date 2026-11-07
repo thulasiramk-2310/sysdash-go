@@ -1,10 +1,14 @@
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import useChartTheme from '../utils/useChartTheme';
+import useSettingsStore from '../hooks/useSettingsStore';
 import { formatBytes } from '../utils/format';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const MemoryChart = ({ currentMetrics }) => {
+  const t = useChartTheme();
+  const prefs = useSettingsStore((st) => st.chartPreferences);
   const memPercent = currentMetrics?.memory?.percent || 0;
   const memUsed = currentMetrics?.memory?.used || 0;
   const memTotal = currentMetrics?.memory?.total || 0;
@@ -15,8 +19,8 @@ const MemoryChart = ({ currentMetrics }) => {
     datasets: [
       {
         data: [memPercent, 100 - memPercent],
-        backgroundColor: ['#00D4FF', 'rgba(148, 163, 184, 0.1)'],
-        borderColor: ['#00D4FF', 'rgba(148, 163, 184, 0.2)'],
+        backgroundColor: [t.a2, t.grid],
+        borderColor: [t.a2, t.border],
         borderWidth: 2,
         cutout: '75%',
       }
@@ -28,13 +32,14 @@ const MemoryChart = ({ currentMetrics }) => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
+       display: prefs.showLegend,
         display: false
       },
       tooltip: {
-        backgroundColor: '#0b1220',
-        titleColor: '#E6EEF8',
-        bodyColor: '#94A3B8',
-        borderColor: '#00D4FF',
+        backgroundColor: t.surface,
+        titleColor: t.text,
+        bodyColor: t.sub,
+        borderColor: t.a2,
         borderWidth: 1,
         padding: 12,
         callbacks: {
@@ -49,8 +54,8 @@ const MemoryChart = ({ currentMetrics }) => {
   };
   
   return (
-    <div className="bg-surface rounded-2xl border border-accent2/20 p-6 shadow-lg">
-      <h3 className="text-text text-lg font-semibold mb-6">Memory Usage</h3>
+    <div className="p-6">
+      <h3 className="text-text/90 text-[15px] font-medium tracking-tight mb-6">Memory Usage</h3>
       
       <div className="flex items-center justify-center gap-8">
         {/* Chart */}
@@ -80,7 +85,7 @@ const MemoryChart = ({ currentMetrics }) => {
               <div className="text-text font-semibold">{formatBytes(memFree)}</div>
             </div>
           </div>
-          <div className="border-t border-sub/20 pt-3">
+          <div className="border-t border-line/[0.07] pt-3">
             <div className="text-sub text-xs">Total</div>
             <div className="text-text font-semibold">{formatBytes(memTotal)}</div>
           </div>

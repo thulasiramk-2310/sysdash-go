@@ -8,11 +8,15 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import useChartTheme from '../utils/useChartTheme';
+import useSettingsStore from '../hooks/useSettingsStore';
 import { formatBytesPerSecond } from '../utils/format';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const DiskChart = ({ metricsHistory, timeframe = 20 }) => {
+  const t = useChartTheme();
+  const prefs = useSettingsStore((st) => st.chartPreferences);
   const data = metricsHistory.slice(-timeframe);
   const labels = data.map((_, index) => `${index + 1}`);
   const readData = data.map(m => m.disk?.read_bps || 0);
@@ -24,13 +28,13 @@ const DiskChart = ({ metricsHistory, timeframe = 20 }) => {
       {
         label: 'Read',
         data: readData,
-        backgroundColor: '#00D4FF',
+        backgroundColor: t.a2,
         borderRadius: 6,
       },
       {
         label: 'Write',
         data: writeData,
-        backgroundColor: '#FFB86B',
+        backgroundColor: t.a3,
         borderRadius: 6,
       }
     ]
@@ -45,10 +49,10 @@ const DiskChart = ({ metricsHistory, timeframe = 20 }) => {
     },
     plugins: {
       legend: {
-        display: true,
+        display: prefs.showLegend,
         position: 'top',
         labels: {
-          color: '#E6EEF8',
+          color: t.text,
           font: {
             family: 'Inter',
             size: 12
@@ -58,10 +62,10 @@ const DiskChart = ({ metricsHistory, timeframe = 20 }) => {
         }
       },
       tooltip: {
-        backgroundColor: '#0b1220',
-        titleColor: '#E6EEF8',
-        bodyColor: '#94A3B8',
-        borderColor: '#00D4FF',
+        backgroundColor: t.surface,
+        titleColor: t.text,
+        bodyColor: t.sub,
+        borderColor: t.a2,
         borderWidth: 1,
         padding: 12,
         callbacks: {
@@ -78,7 +82,7 @@ const DiskChart = ({ metricsHistory, timeframe = 20 }) => {
           drawBorder: false,
         },
         ticks: {
-          color: '#94A3B8',
+          color: t.sub,
           font: {
             family: 'Inter',
             size: 10
@@ -88,11 +92,12 @@ const DiskChart = ({ metricsHistory, timeframe = 20 }) => {
       },
       y: {
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          display: prefs.showGrid,
+          color: t.grid,
           drawBorder: false,
         },
         ticks: {
-          color: '#94A3B8',
+          color: t.sub,
           font: {
             family: 'Inter',
             size: 10
@@ -106,8 +111,8 @@ const DiskChart = ({ metricsHistory, timeframe = 20 }) => {
   };
   
   return (
-    <div className="bg-surface rounded-2xl border border-accent2/20 p-6 shadow-lg">
-      <h3 className="text-text text-lg font-semibold mb-4">Disk I/O</h3>
+    <div className="p-6">
+      <h3 className="text-text/90 text-[15px] font-medium tracking-tight mb-4">Disk I/O</h3>
       <div className="h-48">
         <Bar data={chartData} options={options} />
       </div>

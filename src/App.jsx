@@ -22,10 +22,6 @@ function App() {
   const { currentMetrics, metricsHistory, clearAlerts } = useMetricsStore();
   const { theme, enabledMetrics, exportConfig, setMetricEnabled } = useSettingsStore();
 
-  useMemo(() => {
-    document.body.className = theme === 'light' ? 'bg-gray-100' : 'bg-bg';
-  }, [theme]);
-
   const chartHeightClass = 'h-64 md:h-80'; // Increased chart height for full visibility
   const metricOrder = ['cpu','memory','disk','network','gpu','processes','alerts'];
 
@@ -112,7 +108,7 @@ function App() {
   };
 
   return (
-    <div className={`flex h-screen ${theme === 'light' ? 'bg-gray-100' : 'bg-bg'} overflow-hidden`}>
+    <div className={`flex h-screen ${'bg-bg'} overflow-hidden`}>
       <Sidebar onOpenSettings={handleOpenSettings} onExport={handleExport} onOpenAlerts={handleAlertsClick} />
 
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -122,7 +118,7 @@ function App() {
           <div className="flex justify-end mb-4">
             <button
               onClick={() => setIsSettingsOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-accent1 text-white rounded-md hover:bg-accent1/90 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-accent1 text-bg rounded-md hover:bg-accent1/90 transition-colors"
             >
               <Settings className="w-4 h-4" />
               <span className="text-sm font-medium">Customize Dashboard</span>

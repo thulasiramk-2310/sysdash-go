@@ -1,6 +1,21 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export const ACCENTS = ['cyan', 'red', 'cobalt', 'sage'];
+const THEMES = ['dark', 'light'];
+const validTheme = (t) => (THEMES.includes(t) ? t : 'dark');
+const validAccent = (a) => (ACCENTS.includes(a) ? a : 'cyan'); // old values such as 'purple' fall back to cyan
+
+// Writes the theme/accent onto <html> so CSS variables switch instantly (before React re-renders)
+export const applyAppearance = ({ theme, accentColor }) => {
+  if (typeof document === 'undefined') return;
+  const el = document.documentElement;
+  el.dataset.theme = validTheme(theme);
+  el.dataset.accent = validAccent(accentColor);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', validTheme(theme) === 'light' ? '#F4F1EA' : '#0a0b0e');
+};
+
 const defaultLayout = [
   { i: 'cpu', x: 0, y: 0, w: 6, h: 4, minW: 3, minH: 2 },
   { i: 'memory', x: 6, y: 0, w: 6, h: 4, minW: 3, minH: 2 },
@@ -16,7 +31,7 @@ const useSettingsStore = create(
     (set, get) => ({
       // Theme settings
       theme: 'dark', // 'dark' or 'light'
-      accentColor: 'purple', // 'purple', 'cyan', 'orange', 'green'
+      accentColor: 'cyan', // 'cyan', 'red', 'cobalt', 'sage'
       
       // Refresh rate (milliseconds)
       refreshRate: 2000, // 1s, 2s, 5s, 10s
@@ -59,9 +74,9 @@ const useSettingsStore = create(
       },
       
       // Actions
-      setTheme: (theme) => set({ theme }),
+      setTheme: (theme) => { applyAppearance({ theme, accentColor: get().accentColor }); set({ theme: validTheme(theme) }); },
       
-      setAccentColor: (accentColor) => set({ accentColor }),
+      setAccentColor: (accentColor) => { applyAppearance({ theme: get().theme, accentColor }); set({ accentColor: validAccent(accentColor) }); },
       
       setRefreshRate: (refreshRate) => set({ refreshRate }),
       
@@ -123,9 +138,10 @@ const useSettingsStore = create(
       importConfig: (config) => {
         try {
           const parsed = JSON.parse(config);
+          applyAppearance({ theme: parsed.theme, accentColor: parsed.accentColor });
           set({
-            theme: parsed.theme || 'dark',
-            accentColor: parsed.accentColor || 'purple',
+            theme: validTheme(parsed.theme),
+            accentColor: validAccent(parsed.accentColor),
             refreshRate: parsed.refreshRate || 2000,
             enabledMetrics: parsed.enabledMetrics || get().enabledMetrics,
             layout: parsed.layout || defaultLayout,
@@ -141,9 +157,9 @@ const useSettingsStore = create(
       },
       
       // Reset all settings
-      resetSettings: () => set({
+      resetSettings: () => { applyAppearance({ theme: 'dark', accentColor: 'cyan' }); set({
         theme: 'dark',
-        accentColor: 'purple',
+        accentColor: 'cyan',
         refreshRate: 2000,
         enabledMetrics: {
           cpu: true,
@@ -172,11 +188,13 @@ const useSettingsStore = create(
           smoothLines: true,
           showPoints: false,
         },
-      }),
+      }); },
     }),
     {
       name: 'sysdash-settings',
-      version: 1,
+      version: 2,
+      migrate: (persisted) => ({ ...persisted, theme: validTheme(persisted?.theme), accentColor: validAccent(persisted?.accentColor) }),
+      onRehydrateStorage: () => (state) => { if (state) applyAppearance(state); },
     }
   )
 );

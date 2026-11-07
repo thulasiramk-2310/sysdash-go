@@ -36,24 +36,24 @@ const DraggableCard = ({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className={`draggable-card bg-surface rounded-2xl border border-sub/20 shadow-lg flex flex-col h-full ${
+      className={`draggable-card premium-card flex flex-col h-full overflow-hidden ${
         isDragging ? 'shadow-glow opacity-80' : ''
       } ${className}`}
       style={expandedStyle}
     >
       {/* Card Header */}
-      <div className="flex items-center justify-between p-3 border-b border-sub/20 bg-bg/30 flex-shrink-0">
+      <div className="flex items-center justify-between p-3 border-b border-line/[0.06] flex-shrink-0">
         <div className="flex items-center gap-2">
           {/* Drag handle for react-beautiful-dnd */}
           <span className="drag-handle" {...dragHandleProps} style={{display: 'flex', alignItems: 'center'}}>
             <GripVertical className="w-5 h-5 text-sub cursor-grab active:cursor-grabbing" />
           </span>
-          <h3 className="text-text font-semibold text-sm">{title}</h3>
+          <h3 className="text-sub font-medium text-[11px] uppercase tracking-[0.16em]">{title}</h3>
         </div>
         <div className="flex items-center gap-1">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1.5 hover:bg-bg rounded-lg transition-colors"
+            className="p-1.5 hover:bg-line/[0.06] rounded-lg transition-colors"
             title={isExpanded ? 'Minimize' : 'Maximize'}
           >
             {isExpanded ? (

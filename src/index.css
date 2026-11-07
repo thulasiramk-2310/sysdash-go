@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Theme + accent system (applied via data-theme / data-accent on <html>) ===== */
+:root, :root[data-theme="dark"] {
+  --c-bg: 10 11 14; --c-surface: 17 19 23; --c-raised: 23 26 32;
+  --c-text: 242 244 247; --c-sub: 139 148 163; --c-line: 255 255 255;
+  --c-success: 52 211 153; --c-danger: 248 113 113;
+  --c-accent1: 0 229 255; --c-accent2: 45 212 191; --c-accent3: 245 184 97;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --c-bg: 244 241 234; --c-surface: 255 255 255; --c-raised: 250 248 243;
+  --c-text: 24 27 33; --c-sub: 95 102 114; --c-line: 24 28 36;
+  --c-success: 15 130 95; --c-danger: 200 40 40;
+  --c-accent1: 0 111 134; --c-accent2: 15 118 110; --c-accent3: 180 100 10;
+  color-scheme: light;
+}
+/* Accents from the reference palettes. Dark first, then light overrides. */
+:root[data-accent="cyan"]  { --c-accent1: 0 229 255;  --c-accent2: 45 212 191; --c-accent3: 245 184 97; }   /* Electric Cyan */
+:root[data-accent="red"]   { --c-accent1: 255 75 62;  --c-accent2: 192 192 192; --c-accent3: 245 184 97; }   /* Signal Red + Silver */
+:root[data-accent="cobalt"]{ --c-accent1: 77 141 255; --c-accent2: 212 255 36; --c-accent3: 245 184 97; }   /* Cobalt + Acid Lime */
+:root[data-accent="sage"]  { --c-accent1: 213 133 31; --c-accent2: 135 169 107; --c-accent3: 214 168 120; } /* Amber + Sage */
+:root[data-theme="light"][data-accent="cyan"]  { --c-accent1: 0 111 134;  --c-accent2: 15 118 110; --c-accent3: 180 100 10; }
+:root[data-theme="light"][data-accent="red"]   { --c-accent1: 200 5 0;    --c-accent2: 90 94 102;  --c-accent3: 180 100 10; }
+:root[data-theme="light"][data-accent="cobalt"]{ --c-accent1: 21 88 201;  --c-accent2: 94 125 0;   --c-accent3: 180 100 10; }
+:root[data-theme="light"][data-accent="sage"]  { --c-accent1: 150 85 8;   --c-accent2: 74 107 54;  --c-accent3: 90 62 43; }
+
+
 body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -9,7 +35,27 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0f1724;
+  background-color: rgb(var(--c-bg));
+  background-image:
+    radial-gradient(1200px 600px at 85% -10%, rgb(var(--c-accent1) / 0.07), transparent 60%),
+    radial-gradient(900px 500px at -5% 110%, rgb(var(--c-accent2) / 0.05), transparent 60%);
+  background-attachment: fixed;
+  color: rgb(var(--c-text));
+  font-feature-settings: 'cv11', 'ss01';
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.005em;
+}
+
+h1, h2, h3, h4 { letter-spacing: -0.02em; }
+::selection { background: rgb(var(--c-accent1) / 0.28); color: #fff; }
+:focus-visible { outline: 2px solid rgb(var(--c-accent1)); outline-offset: 2px; border-radius: 6px; }
+
+/* Premium surfaces: hairline border + soft top light, no heavy shadows */
+.premium-card {
+  background: linear-gradient(180deg, rgb(var(--c-line) / 0.035), rgb(var(--c-line) / 0) 40%), rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line) / 0.07);
+  border-radius: 16px;
+  box-shadow: 0 1px 0 rgb(var(--c-line) / 0.04) inset, 0 12px 32px -14px rgba(0,0,0,0.65);
 }
 
 * {
@@ -23,16 +69,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b1220;
+  background: rgb(var(--c-surface));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #7C5CFF;
+  background: rgb(var(--c-line) / 0.14);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9575FF;
+  background: rgb(var(--c-accent1) / 0.55);
 }
 
 /* Animation utilities */
@@ -47,7 +93,7 @@ body {
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
-  background: linear-gradient(to right, transparent 0%, rgba(124, 92, 255, 0.2) 50%, transparent 100%);
+  background: linear-gradient(to right, transparent 0%, rgb(var(--c-accent1) / 0.2) 50%, transparent 100%);
   background-size: 1000px 100%;
 }
 
@@ -86,16 +132,16 @@ body {
   bottom: 3px;
   width: 5px;
   height: 5px;
-  border-right: 2px solid rgba(124, 92, 255, 0.6);
-  border-bottom: 2px solid rgba(124, 92, 255, 0.6);
+  border-right: 2px solid rgb(var(--c-accent1) / 0.6);
+  border-bottom: 2px solid rgb(var(--c-accent1) / 0.6);
 }
 
 /* Grid Item Container */
 .grid-item {
-  background: rgba(18,24,38,0.98);
+  background: rgb(var(--c-surface) / 0.98);
   border-radius: 12px;
   padding: 18px;
-  box-shadow: 0 2px 12px rgba(11,12,20,0.35);
+  box-shadow: 0 2px 12px rgb(var(--c-bg) / 0.35);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -190,7 +236,7 @@ body {
 
 /* Dragging State */
 .react-grid-item.react-grid-placeholder {
-  background: rgba(124, 92, 255, 0.2);
+  background: rgb(var(--c-accent1) / 0.2);
   opacity: 0.5;
   transition-duration: 100ms;
   z-index: 2;
@@ -200,7 +246,7 @@ body {
   -o-user-select: none;
   user-select: none;
   border-radius: 16px;
-  border: 2px dashed rgba(124, 92, 255, 0.6);
+  border: 2px dashed rgb(var(--c-accent1) / 0.6);
 }
 
 .react-grid-item.react-draggable-dragging {
@@ -217,7 +263,7 @@ body {
 }
 
 .react-grid-item.static {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(var(--c-line) / 0.1);
 }
 
 .drag-handle {
@@ -239,12 +285,12 @@ body.bg-gray-100 ::-webkit-scrollbar-track {
 }
 
 body.bg-gray-100 ::-webkit-scrollbar-thumb {
-  background: #7C5CFF;
+  background: rgb(var(--c-accent1));
 }
 
 body.bg-gray-100 .react-grid-item.react-grid-placeholder {
-  background: rgba(124, 92, 255, 0.1);
-  border-color: rgba(124, 92, 255, 0.4);
+  background: rgb(var(--c-accent1) / 0.1);
+  border-color: rgb(var(--c-accent1) / 0.4);
 }
 
 /* CSS Grid layout helpers used by the simplified dashboard */
@@ -266,10 +312,10 @@ body.bg-gray-100 .react-grid-item.react-grid-placeholder {
 }
 
  .draggable-card {
-  background: rgba(18,24,38,0.98);
+  background: rgb(var(--c-surface) / 0.98);
   border-radius: 12px;
   padding: 6px 8px;
-  box-shadow: 0 2px 12px rgba(11,12,20,0.35);
+  box-shadow: 0 2px 12px rgb(var(--c-bg) / 0.35);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -297,7 +343,7 @@ body.bg-gray-100 .react-grid-item.react-grid-placeholder {
   height: 22px;
   border-radius: 6px;
   background: transparent;
-  border: 2px solid rgba(255,255,255,0.06);
+  border: 2px solid rgb(var(--c-line) / 0.06);
   display: inline-block;
   position: relative;
   transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
@@ -305,12 +351,12 @@ body.bg-gray-100 .react-grid-item.react-grid-placeholder {
 
 .fancy-checkbox:focus {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(124,92,255,0.12);
+  box-shadow: 0 0 0 4px rgb(var(--c-accent1) / 0.12);
 }
 
 .fancy-checkbox:checked {
-  background: linear-gradient(180deg, #7C5CFF, #5A3BEE);
-  border-color: rgba(124,92,255,1);
+  background: linear-gradient(180deg, rgb(var(--c-accent1)), rgb(var(--c-accent1)));
+  border-color: rgb(var(--c-accent1) / 1);
 }
 
 .fancy-checkbox:checked::after {

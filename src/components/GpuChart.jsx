@@ -1,7 +1,11 @@
 import { Line } from 'react-chartjs-2';
 import { formatTimestamp } from '../utils/format';
+import useChartTheme from '../utils/useChartTheme';
+import useSettingsStore from '../hooks/useSettingsStore';
 
 const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
+  const t = useChartTheme();
+  const prefs = useSettingsStore((st) => st.chartPreferences);
   const data = metricsHistory.slice(-timeframe);
   const labels = data.map(m => formatTimestamp(m.timestamp));
   const gpuData = data.map(m => m.gpu?.usage || 0);
@@ -13,24 +17,24 @@ const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
       {
         label: 'GPU Usage',
         data: gpuData,
-        borderColor: '#10B981',
-        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        borderColor: t.ok,
+        backgroundColor: t.okA(0.12),
         borderWidth: 2,
         fill: true,
-        tension: 0.4,
-        pointRadius: 0,
+        tension: prefs.smoothLines ? 0.4 : 0,
+        pointRadius: prefs.showPoints ? 3 : 0,
         pointHoverRadius: 5,
         yAxisID: 'y',
       },
       {
         label: 'Temperature',
         data: tempData,
-        borderColor: '#EF4444',
-        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        borderColor: t.bad,
+        backgroundColor: t.badA(0.12),
         borderWidth: 2,
         fill: true,
-        tension: 0.4,
-        pointRadius: 0,
+        tension: prefs.smoothLines ? 0.4 : 0,
+        pointRadius: prefs.showPoints ? 3 : 0,
         pointHoverRadius: 5,
         yAxisID: 'y1',
       }
@@ -49,10 +53,10 @@ const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
     },
     plugins: {
       legend: {
-        display: true,
+        display: prefs.showLegend,
         position: 'top',
         labels: {
-          color: '#E6EEF8',
+          color: t.text,
           font: {
             family: 'Inter',
             size: 12
@@ -62,10 +66,10 @@ const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
         }
       },
       tooltip: {
-        backgroundColor: '#0b1220',
-        titleColor: '#E6EEF8',
-        bodyColor: '#94A3B8',
-        borderColor: '#10B981',
+        backgroundColor: t.surface,
+        titleColor: t.text,
+        bodyColor: t.sub,
+        borderColor: t.ok,
         borderWidth: 1,
         padding: 12,
       }
@@ -73,11 +77,12 @@ const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
     scales: {
       x: {
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          display: prefs.showGrid,
+          color: t.grid,
           drawBorder: false,
         },
         ticks: {
-          color: '#94A3B8',
+          color: t.sub,
           font: {
             family: 'Inter',
             size: 10
@@ -92,11 +97,12 @@ const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
         min: 0,
         max: 100,
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          display: prefs.showGrid,
+          color: t.grid,
           drawBorder: false,
         },
         ticks: {
-          color: '#94A3B8',
+          color: t.sub,
           font: {
             family: 'Inter',
             size: 10
@@ -108,7 +114,7 @@ const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
         title: {
           display: true,
           text: 'Usage (%)',
-          color: '#94A3B8'
+          color: t.sub
         }
       },
       y1: {
@@ -120,7 +126,7 @@ const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
           drawOnChartArea: false,
         },
         ticks: {
-          color: '#94A3B8',
+          color: t.sub,
           font: {
             family: 'Inter',
             size: 10
@@ -132,7 +138,7 @@ const GpuChart = ({ metricsHistory, timeframe = 60 }) => {
         title: {
           display: true,
           text: 'Temp (°C)',
-          color: '#94A3B8'
+          color: t.sub
         }
       }
     }

@@ -12,6 +12,8 @@ import {
   Filler
 } from 'chart.js';
 import { formatTimestamp } from '../utils/format';
+import useChartTheme from '../utils/useChartTheme';
+import useSettingsStore from '../hooks/useSettingsStore';
 
 ChartJS.register(
   CategoryScale,
@@ -25,6 +27,8 @@ ChartJS.register(
 );
 
 const CpuChart = ({ metricsHistory, timeframe = 60 }) => {
+  const t = useChartTheme();
+  const prefs = useSettingsStore((st) => st.chartPreferences);
   const chartRef = useRef(null);
   
   // Prepare data
@@ -38,14 +42,14 @@ const CpuChart = ({ metricsHistory, timeframe = 60 }) => {
       {
         label: 'CPU Usage',
         data: cpuData,
-        borderColor: '#7C5CFF',
-        backgroundColor: 'rgba(124, 92, 255, 0.1)',
+        borderColor: t.a1,
+        backgroundColor: t.a1a(0.12),
         borderWidth: 2,
         fill: true,
-        tension: 0.4,
-        pointRadius: 0,
+        tension: prefs.smoothLines ? 0.4 : 0,
+        pointRadius: prefs.showPoints ? 3 : 0,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: '#7C5CFF',
+        pointHoverBackgroundColor: t.a1,
         pointHoverBorderColor: '#fff',
         pointHoverBorderWidth: 2,
       }
@@ -64,10 +68,10 @@ const CpuChart = ({ metricsHistory, timeframe = 60 }) => {
     },
     plugins: {
       legend: {
-        display: true,
+        display: prefs.showLegend,
         position: 'top',
         labels: {
-          color: '#E6EEF8',
+          color: t.text,
           font: {
             family: 'Inter',
             size: 12
@@ -77,10 +81,10 @@ const CpuChart = ({ metricsHistory, timeframe = 60 }) => {
         }
       },
       tooltip: {
-        backgroundColor: '#0b1220',
-        titleColor: '#E6EEF8',
-        bodyColor: '#94A3B8',
-        borderColor: '#7C5CFF',
+        backgroundColor: t.surface,
+        titleColor: t.text,
+        bodyColor: t.sub,
+        borderColor: t.a1,
         borderWidth: 1,
         padding: 12,
         displayColors: true,
@@ -94,11 +98,12 @@ const CpuChart = ({ metricsHistory, timeframe = 60 }) => {
     scales: {
       x: {
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          display: prefs.showGrid,
+          color: t.grid,
           drawBorder: false,
         },
         ticks: {
-          color: '#94A3B8',
+          color: t.sub,
           font: {
             family: 'Inter',
             size: 10
@@ -111,11 +116,12 @@ const CpuChart = ({ metricsHistory, timeframe = 60 }) => {
         min: 0,
         max: 100,
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          display: prefs.showGrid,
+          color: t.grid,
           drawBorder: false,
         },
         ticks: {
-          color: '#94A3B8',
+          color: t.sub,
           font: {
             family: 'Inter',
             size: 10
@@ -129,9 +135,9 @@ const CpuChart = ({ metricsHistory, timeframe = 60 }) => {
   };
   
   return (
-    <div className="bg-surface rounded-2xl border border-accent1/20 p-6 shadow-lg">
+    <div className="p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-text text-lg font-semibold">CPU Utilization</h3>
+        <h3 className="text-text/90 text-[15px] font-medium tracking-tight">CPU Utilization</h3>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-accent1 animate-pulse" />
           <span className="text-sub text-sm">Live</span>

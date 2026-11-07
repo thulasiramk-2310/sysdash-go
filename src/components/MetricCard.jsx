@@ -53,7 +53,7 @@ const MetricCard = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`relative bg-gradient-to-br ${colorClasses[color]} border rounded-2xl p-6 shadow-lg overflow-hidden hover:shadow-glow transition-shadow duration-300`}
+      className={`relative bg-gradient-to-br ${colorClasses[color]} border rounded-2xl p-6 shadow-card overflow-hidden hover:shadow-glow transition-shadow duration-300`}
     >
       {/* Accent bar */}
       <div className={`absolute top-0 left-0 right-0 h-1 ${bgColorClasses[color]}`} />
@@ -121,10 +121,10 @@ const SparklineChart = ({ data, color }) => {
   }).join(' ');
   
   const colorMap = {
-    accent1: '#7C5CFF',
-    accent2: '#00D4FF',
-    accent3: '#FFB86B',
-    success: '#10B981',
+    accent1: '#22D3EE',
+    accent2: '#2DD4BF',
+    accent3: '#F5B861',
+    success: '#34D399',
     danger: '#EF4444',
   };
   

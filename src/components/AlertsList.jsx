@@ -29,7 +29,7 @@ const AlertsList = () => {
   };
   
   return (
-    <div className="bg-surface rounded-2xl border border-sub/20 p-6 shadow-lg">
+    <div className="p-6">
       <h3 className="text-text text-lg font-semibold mb-4">Alerts</h3>
       
       <div className="space-y-3 max-h-96 overflow-y-auto">

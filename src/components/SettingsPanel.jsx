@@ -78,10 +78,10 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
   ];
 
   const accentColorOptions = [
-    { label: 'Purple', value: 'purple', color: '#7C5CFF' },
-    { label: 'Cyan', value: 'cyan', color: '#00D4FF' },
-    { label: 'Orange', value: 'orange', color: '#FFB86B' },
-    { label: 'Green', value: 'green', color: '#10B981' },
+    { label: 'Electric Cyan', hint: 'Cyan + teal', value: 'cyan', colors: ['#00E5FF', '#2DD4BF'] },
+    { label: 'Signal Red', hint: 'Red + silver', value: 'red', colors: ['#FF4B3E', '#C0C0C0'] },
+    { label: 'Cobalt & Lime', hint: 'Blue + acid lime', value: 'cobalt', colors: ['#4D8DFF', '#D4FF24'] },
+    { label: 'Amber & Sage', hint: 'Amber + sage green', value: 'sage', colors: ['#D5851F', '#87A96B'] },
   ];
 
   const metricOptions = [
@@ -120,10 +120,10 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-2xl bg-surface border-l border-sub/20 shadow-2xl z-50 overflow-hidden flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-2xl bg-surface border-l border-line/[0.07] shadow-2xl z-50 overflow-hidden flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-sub/20">
+            <div className="flex items-center justify-between p-6 border-b border-line/[0.07]">
               <h2 className="text-2xl font-bold text-text">Settings</h2>
               <button
                 onClick={onClose}
@@ -135,14 +135,14 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 px-6 py-4 border-b border-sub/20 overflow-x-auto">
+            <div className="flex gap-2 px-6 py-4 border-b border-line/[0.07] overflow-x-auto">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'bg-accent1 text-white'
+                      ? 'bg-accent1 text-bg'
                       : 'text-sub hover:text-text hover:bg-bg'
                   }`}
                 >
@@ -175,7 +175,7 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
                           className={`px-4 py-3 rounded-lg border-2 transition-all ${
                             refreshRate === option.value
                               ? 'border-accent1 bg-accent1/10 text-accent1'
-                              : 'border-sub/20 text-sub hover:border-accent1/50 hover:text-text'
+                              : 'border-line/[0.07] text-sub hover:border-accent1/50 hover:text-text'
                           }`}
                         >
                           {option.label}
@@ -311,7 +311,7 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
                         className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                           theme === 'dark'
                             ? 'border-accent1 bg-accent1/10 text-accent1'
-                            : 'border-sub/20 text-sub hover:border-accent1/50 hover:text-text'
+                            : 'border-line/[0.07] text-sub hover:border-accent1/50 hover:text-text'
                         }`}
                       >
                         <Moon className="w-5 h-5" />
@@ -322,7 +322,7 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
                         className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                           theme === 'light'
                             ? 'border-accent1 bg-accent1/10 text-accent1'
-                            : 'border-sub/20 text-sub hover:border-accent1/50 hover:text-text'
+                            : 'border-line/[0.07] text-sub hover:border-accent1/50 hover:text-text'
                         }`}
                       >
                         <Sun className="w-5 h-5" />
@@ -342,17 +342,22 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
                         <button
                           key={option.value}
                           onClick={() => setAccentColor(option.value)}
+                          aria-pressed={accentColor === option.value}
                           className={`flex items-center gap-3 px-4 py-3 rounded-lg border-2 transition-all ${
                             accentColor === option.value
                               ? 'border-accent1 bg-accent1/10'
-                              : 'border-sub/20 hover:border-accent1/50'
+                              : 'border-line/[0.07] hover:border-accent1/50'
                           }`}
                         >
-                          <div
-                            className="w-6 h-6 rounded-full"
-                            style={{ backgroundColor: option.color }}
-                          />
-                          <span className="text-text">{option.label}</span>
+                          <div className="flex -space-x-2 flex-shrink-0" aria-hidden="true">
+                            {option.colors.map((c) => (
+                              <span key={c} className="w-6 h-6 rounded-full border-2 border-surface" style={{ backgroundColor: c }} />
+                            ))}
+                          </div>
+                          <span className="text-left leading-tight">
+                            <span className="block text-text text-sm font-medium">{option.label}</span>
+                            <span className="block text-sub text-xs">{option.hint}</span>
+                          </span>
                         </button>
                       ))}
                     </div>
@@ -418,7 +423,7 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
                     </label>
                     <button
                       onClick={handleExport}
-                      className="w-full px-4 py-3 bg-accent1 text-white rounded-lg hover:bg-accent1/90 transition-colors font-medium"
+                      className="w-full px-4 py-3 bg-accent1 text-bg rounded-lg hover:bg-accent1/90 transition-colors font-medium"
                     >
                       <Download className="w-4 h-4 inline mr-2" />
                       Download Config File
@@ -434,12 +439,12 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
                       value={importText}
                       onChange={(e) => setImportText(e.target.value)}
                       placeholder="Paste configuration JSON here..."
-                      className="w-full h-32 px-4 py-3 bg-bg text-text rounded-lg border border-sub/20 focus:border-accent1 focus:outline-none resize-none font-mono text-sm"
+                      className="w-full h-32 px-4 py-3 bg-bg text-text rounded-lg border border-line/[0.07] focus:border-accent1 focus:outline-none resize-none font-mono text-sm"
                     />
                     <button
                       onClick={handleImport}
                       disabled={!importText.trim()}
-                      className="w-full mt-3 px-4 py-3 bg-accent2 text-white rounded-lg hover:bg-accent2/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full mt-3 px-4 py-3 bg-accent2 text-bg rounded-lg hover:bg-accent2/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Upload className="w-4 h-4 inline mr-2" />
                       Import Configuration
@@ -455,7 +460,7 @@ const SettingsPanel = ({ isOpen, onClose, initialTab = null }) => {
                     <div className="space-y-3">
                       <button
                         onClick={resetLayout}
-                        className="w-full px-4 py-3 bg-bg text-text rounded-lg hover:bg-bg/70 transition-colors border border-sub/20"
+                        className="w-full px-4 py-3 bg-bg text-text rounded-lg hover:bg-bg/70 transition-colors border border-line/[0.07]"
                       >
                         Reset Dashboard Layout
                       </button>

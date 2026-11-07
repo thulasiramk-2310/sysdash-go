@@ -71,7 +71,7 @@ const PopupView = () => {
               </p>
             </div>
           </div>
-          <MiniSparkline data={cpuSparkline} color="#7C5CFF" />
+          <MiniSparkline data={cpuSparkline} color="rgb(var(--c-accent1))" />
         </div>
         
         {/* Memory Card */}
@@ -90,7 +90,7 @@ const PopupView = () => {
               </p>
             </div>
           </div>
-          <MiniSparkline data={memSparkline} color="#00D4FF" />
+          <MiniSparkline data={memSparkline} color="rgb(var(--c-accent2))" />
         </div>
         
         {/* Disk Card */}
@@ -106,12 +106,12 @@ const PopupView = () => {
               </p>
             </div>
           </div>
-          <MiniSparkline data={diskSparkline} color="#10B981" />
+          <MiniSparkline data={diskSparkline} color="rgb(var(--c-success))" />
         </div>
         
         {/* Top Process */}
         {currentMetrics.processes && currentMetrics.processes.length > 0 && (
-          <div className="bg-surface border border-sub/20 rounded-xl p-4">
+          <div className="bg-surface border border-line/[0.07] rounded-xl p-4">
             <p className="text-sub text-xs uppercase tracking-wide mb-3">Top Process</p>
             <div className="flex items-center justify-between">
               <span className="text-text font-medium">{currentMetrics.processes[0].name}</span>

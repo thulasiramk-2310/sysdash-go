@@ -71,9 +71,9 @@ const ProcessTable = ({ processes = [] }) => {
   };
   
   return (
-    <div className="bg-surface rounded-2xl border border-accent1/20 shadow-lg overflow-hidden">
+    <div className="overflow-hidden">
       {/* Header */}
-      <div className="border-b border-sub/20 bg-bg/50">
+      <div className="border-b border-line/[0.07] bg-bg/50">
         <div className="flex items-center px-4 py-3">
           <button
             onClick={() => handleSort('pid')}

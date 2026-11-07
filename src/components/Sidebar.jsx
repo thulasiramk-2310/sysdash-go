@@ -32,19 +32,19 @@ const Sidebar = ({ onOpenSettings = () => {}, onExport = () => {}, onOpenAlerts 
     <motion.aside
       initial={false}
       animate={{ width: isCollapsed ? 80 : 280 }}
-      className="bg-surface border-r border-sub/20 flex flex-col shadow-lg relative"
+      className="bg-surface/80 backdrop-blur-xl border-r border-line/[0.06] flex flex-col relative"
     >
       {/* Toggle button */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 bg-accent1 rounded-full flex items-center justify-center text-white hover:bg-accent1/80 transition-colors z-10"
+        className="absolute -right-3 top-6 w-6 h-6 bg-raised border border-line/[0.12] rounded-full flex items-center justify-center text-text hover:border-accent1/60 transition-colors z-10"
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
       </button>
       
       {/* Hosts section (show only selected host; fetched from backend) */}
-      <div className="p-6 border-b border-sub/20">
+      <div className="p-6 border-b border-line/[0.07]">
         {!isCollapsed ? (
           <>
             <h3 className="text-sub text-xs font-semibold uppercase tracking-wide mb-3">
@@ -54,8 +54,8 @@ const Sidebar = ({ onOpenSettings = () => {}, onExport = () => {}, onOpenAlerts 
               <button
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                   selectedHost
-                    ? 'bg-accent1/20 text-accent1 border border-accent1/50'
-                    : 'text-sub hover:bg-bg hover:text-text'
+                    ? 'bg-accent1/[0.08] text-accent1 border border-accent1/30'
+                    : 'text-sub hover:bg-line/[0.04] hover:text-text'
                 }`}
                 onClick={() => {/* noop or future host picker */}}
               >
@@ -73,7 +73,7 @@ const Sidebar = ({ onOpenSettings = () => {}, onExport = () => {}, onOpenAlerts 
               className={`w-full flex items-center justify-center p-3 rounded-lg transition-colors ${
                 selectedHost
                   ? 'bg-accent1/20 text-accent1'
-                  : 'text-sub hover:bg-bg hover:text-text'
+                  : 'text-sub hover:bg-line/[0.04] hover:text-text'
               }`}
               title={selectedHost || 'No host'}
             >
@@ -92,8 +92,8 @@ const Sidebar = ({ onOpenSettings = () => {}, onExport = () => {}, onOpenAlerts 
               onClick={item.action}
               className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
                 item.active
-                  ? 'bg-accent1/10 text-accent1'
-                  : 'text-sub hover:bg-bg hover:text-text'
+                  ? 'bg-line/[0.06] text-text shadow-[inset_2px_0_0_0_rgb(var(--c-accent1))]'
+                  : 'text-sub hover:bg-line/[0.04] hover:text-text'
               }`}
               title={isCollapsed ? item.label : ''}
             >
@@ -117,7 +117,7 @@ const Sidebar = ({ onOpenSettings = () => {}, onExport = () => {}, onOpenAlerts 
       
       {/* Footer */}
       {!isCollapsed && (
-        <div className="p-4 border-t border-sub/20">
+        <div className="p-4 border-t border-line/[0.07]">
           <div className="text-xs text-sub">
             <p>SysDash v1.0.0</p>
             <p className="mt-1">© 2025</p>
